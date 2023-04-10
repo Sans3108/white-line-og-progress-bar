@@ -1,65 +1,125 @@
 export default function Home() {
   return (
-    <main className="flex items-center justify-center h-screen flex-col text-left">
-      <h1>
-        Parameter Docs for <code className="bg-gray-600">/api/bar</code>
-      </h1>
-      <br></br>
-      <p>
-        <code className="bg-gray-600">ct: number = 69</code> Current time (in seconds)<br></br>
-        <code className="bg-gray-600">tt: number = 420</code> Total time (in seconds)<br></br>
-        <code className="bg-gray-600">ic: boolean = true</code> Is it the current song?<br></br>
-        <code className="bg-gray-600">ip: boolean = false</code> Is it paused?<br></br>
-        <code className="bg-gray-600">il: boolean = false</code> Is it a livestream?<br></br>
-        <code className="bg-gray-600">pt: number = 0</code> Position in queue<br></br>
-        <code className="bg-gray-600">
-          c1: string = '
-          <span
+    <main>
+      <div
+        className="flex justify-center items-center flex-col absolute top-1/2 left-1/2 bg-gray-800"
+        style={{
+          maxWidth: 'max-content',
+          borderRadius: '20px',
+          paddingRight: '40px',
+          paddingLeft: '40px',
+          paddingTop: '20px',
+          paddingBottom: '20px',
+          transform: 'translate(-50%, -50%)',
+          border: '1px solid white',
+          margin: '0'
+        }}>
+        <h1 className="text-center">
+          Parameter Docs for{' '}
+          <code
+            className="bg-slate-600"
             style={{
-              backgroundColor: '#a63780'
+              color: 'cyan'
             }}>
-            FF77D1
-          </span>
-          '
-        </code>{' '}
-        First gradient color (hex string)<br></br>
-        <code className="bg-gray-600">
-          c2: string = '
-          <span
+            /api/bar
+          </code>
+        </h1>
+        <br></br>
+        <p>
+          <code
+            className="bg-slate-600"
             style={{
-              backgroundColor: '#be476d'
+              color: 'cyan'
             }}>
-            FEA0BE
-          </span>
-          '
-        </code>{' '}
-        Second gradient color (hex string)<br></br>
-        <code className="bg-gray-600">
-          c3: string = '
-          <span
+            ct: number = 69
+          </code>{' '}
+          Current time (in seconds)<br></br>
+          <code
+            className="bg-slate-600"
             style={{
-              backgroundColor: '#b13d43'
+              color: 'cyan'
             }}>
-            FE898F
-          </span>
-          '
-        </code>{' '}
-        Third gradient color (hex string)<br></br>
-        <code className="bg-gray-600">
-          c4: string = '
-          <span
+            tt: number = 420
+          </code>{' '}
+          Total time (in seconds)<br></br>
+          <code
+            className="bg-slate-600"
             style={{
-              backgroundColor: '#783528'
+              color: 'cyan'
             }}>
-            FF5B3A
-          </span>
-          '
-        </code>{' '}
-        Fourth gradient color (hex string)<br></br>
-        <code className="bg-gray-600">tx: string = undefined</code> Force custom text<br></br>
-      </p>
-      <br></br>
-      <p>Btw I have no idea why are you here, please leave me to my madness</p>
+            c1: string = '
+            <span
+              style={{
+                backgroundColor: '#000000',
+                color: 'white'
+              }}>
+              000000
+            </span>
+            '
+          </code>{' '}
+          First gradient color (hex string)<br></br>
+          <code
+            className="bg-slate-600"
+            style={{
+              color: 'cyan'
+            }}>
+            c2: string = '
+            <span
+              style={{
+                backgroundColor: '#000000',
+                color: 'white'
+              }}>
+              000000
+            </span>
+            '
+          </code>{' '}
+          Second gradient color (hex string)<br></br>
+          <code
+            className="bg-slate-600"
+            style={{
+              color: 'cyan'
+            }}>
+            c3: string = '
+            <span
+              style={{
+                backgroundColor: '#000000',
+                color: 'white'
+              }}>
+              000000
+            </span>
+            '
+          </code>{' '}
+          Third gradient color (hex string)<br></br>
+          <code
+            className="bg-slate-600"
+            style={{
+              color: 'cyan'
+            }}>
+            c4: string = '
+            <span
+              style={{
+                backgroundColor: '#000000',
+                color: 'white'
+              }}>
+              000000
+            </span>
+            '
+          </code>{' '}
+          Fourth gradient color (hex string)<br></br>
+          <code
+            className="bg-slate-600"
+            style={{
+              color: 'cyan'
+            }}>
+            txt: string = 'undefined'
+          </code>{' '}
+          Text to display<br></br>
+        </p>
+        <br></br>
+        <p className="text-center">
+          Btw I have no idea why are you here, go away lol<br></br>This page wasn't made for mobile...
+        </p>
+      </div>
     </main>
   );
 }

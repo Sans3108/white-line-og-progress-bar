@@ -1,19 +1,25 @@
+import '@/styles/barFont.css';
 import type { NextApiRequest } from 'next';
-
 import { ImageResponse } from '@vercel/og';
 
-function formatDuration(sec: number, soft = false) {
-  const formatInt = (int: number) => (int < 10 ? `0${int}` : int);
-  if (!sec || !Number(sec)) return '00:00';
-  if (typeof soft !== 'boolean') soft = false;
+function isHexColor(str: string): boolean {
+  if (str.length !== 6) return false;
 
-  const seconds = Math.round(sec % 60);
-  const minutes = Math.floor((sec % 3600) / 60);
-  const hours = Math.floor(sec / 3600);
+  for (let i = 0; i < str.length; i++) {
+    const charCode = str.charCodeAt(i);
+    if (
+      !(
+        (
+          (charCode >= 48 && charCode <= 57) || // 0-9
+          (charCode >= 65 && charCode <= 70) || // A-F
+          (charCode >= 97 && charCode <= 102)
+        ) // a-f
+      )
+    )
+      return false;
+  }
 
-  if (hours > 0) return soft ? `${formatInt(hours)}h ${formatInt(minutes)}m` : `${formatInt(hours)}:${formatInt(minutes)}:${formatInt(seconds)}`;
-  if (minutes > 0) return soft ? `${formatInt(minutes)}m` : `${formatInt(minutes)}:${formatInt(seconds)}`;
-  return soft ? `${formatInt(seconds)}s` : `00:${formatInt(seconds)}`;
+  return true;
 }
 
 function getParam(V: unknown, D: number, color?: boolean): number;
@@ -44,58 +50,24 @@ function getParam(V: unknown, D: boolean | number | string, color?: boolean) {
   } else return Number(V);
 }
 
-function isHexColor(str: string): boolean {
-  if (str.length !== 6) return false;
-
-  for (let i = 0; i < str.length; i++) {
-    const charCode = str.charCodeAt(i);
-    if (
-      !(
-        (
-          (charCode >= 48 && charCode <= 57) || // 0-9
-          (charCode >= 65 && charCode <= 70) || // A-F
-          (charCode >= 97 && charCode <= 102)
-        ) // a-f
-      )
-    )
-      return false;
-  }
-
-  return true;
-}
-
 export const config = {
   runtime: 'edge'
 };
 
-const VarelaRoundFontPromise = fetch(new URL('../../../assets/VarelaRound-Regular.ttf', import.meta.url)).then(res => res.arrayBuffer());
-
 export default async function handler(req: NextApiRequest) {
-  const VarelaRoundFont = await VarelaRoundFontPromise;
-
   const queryParams = new URL(req.url!).searchParams;
 
-  const currentTime = getParam(queryParams.get('ct'), 69); // Current time
-  const totalTime = getParam(queryParams.get('tt'), 420); // Total time
-  const isCurrent = getParam(queryParams.get('ic'), true); // Is it the current song?
-  const isPaused = getParam(queryParams.get('ip'), false); // Is it paused?
-  const isLive = getParam(queryParams.get('il'), false); // Is it Live?
-  const position = getParam(queryParams.get('pt'), 0); // Position
+  const c = getParam(queryParams.get('ct'), 69); // Current time
+  const t = getParam(queryParams.get('tt'), 420); // Total time
 
-  const col1 = getParam(queryParams.get('c1'), 'a63780');
-  const col2 = getParam(queryParams.get('c2'), 'be476d');
-  const col3 = getParam(queryParams.get('c3'), 'b13d43');
-  const col4 = getParam(queryParams.get('c4'), '783528');
+  const col1 = getParam(queryParams.get('c1'), '000000', true);
+  const col2 = getParam(queryParams.get('c2'), '000000', true);
+  const col3 = getParam(queryParams.get('c3'), '000000', true);
+  const col4 = getParam(queryParams.get('c4'), '000000', true);
 
-  const forceText = queryParams.get('tx');
+  const p = (c / t) * 100;
 
-  // e.g. "02:08 / 07:36 - 05:28 left"
-  const formattedTime = `${formatDuration(currentTime)} / ${formatDuration(totalTime)} - ${formatDuration(totalTime - currentTime)} left`;
-
-  // Compose the string that's going to be written
-  const str = isCurrent ? (isLive ? '- LIVE -' : formattedTime) + (isPaused ? ' (Paused)' : '') : position === 1 ? 'Playing next...' : `Waiting for ${position} songs to play...`;
-
-  const displayString = forceText ? forceText : str;
+  const text = getParam(queryParams.get('txt'), `undefined`);
 
   return new ImageResponse(
     (
@@ -115,31 +87,23 @@ export default async function handler(req: NextApiRequest) {
             height: 40,
             width: 400,
             borderRadius: 23,
-            backgroundSize: '10% 100%',
+            backgroundSize: `${p}% 100%`,
             backgroundRepeat: 'no-repeat',
-            backgroundImage: 'linear-gradient(to right, rgba(255, 255, 255, 0.2))'
+            backgroundImage: 'linear-gradient(to right, rgba(255, 255, 255, 0.3))'
           }}>
           <p
+            className="displayText"
             style={{
-              color: 'white',
-              font: `700 18px Comic Sans MS`
+              color: 'white'
             }}>
-            {displayString}
+            {text}
           </p>
         </div>
       </div>
     ),
     {
       width: 400,
-      height: 40,
-      fonts: [
-        {
-          name: 'Varela Round',
-          data: VarelaRoundFont,
-          style: 'normal',
-          weight: 700
-        }
-      ]
+      height: 40
     }
   );
 }
