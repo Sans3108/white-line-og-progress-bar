@@ -1,4 +1,3 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest } from 'next';
 
 import { ImageResponse } from '@vercel/og';
@@ -77,16 +76,16 @@ export default async function handler(req: NextApiRequest) {
   const queryParams = new URL(req.url!).searchParams;
 
   const currentTime = getParam(queryParams.get('ct'), 69); // Current time
-  const totalTime = getParam(queryParams.get('tt'), 69); // Total time
+  const totalTime = getParam(queryParams.get('tt'), 420); // Total time
   const isCurrent = getParam(queryParams.get('ic'), true); // Is it the current song?
   const isPaused = getParam(queryParams.get('ip'), false); // Is it paused?
   const isLive = getParam(queryParams.get('il'), false); // Is it Live?
   const position = getParam(queryParams.get('pt'), 0); // Position
 
-  const col1 = getParam(queryParams.get('c1'), 'FF77D1');
-  const col2 = getParam(queryParams.get('c2'), 'FEA0BE');
-  const col3 = getParam(queryParams.get('c3'), 'FE898F');
-  const col4 = getParam(queryParams.get('c4'), 'FF5B3A');
+  const col1 = getParam(queryParams.get('c1'), 'a63780');
+  const col2 = getParam(queryParams.get('c2'), 'be476d');
+  const col3 = getParam(queryParams.get('c3'), 'b13d43');
+  const col4 = getParam(queryParams.get('c4'), '783528');
 
   const forceText = queryParams.get('tx');
 
@@ -103,8 +102,8 @@ export default async function handler(req: NextApiRequest) {
       <div
         style={{
           display: 'flex',
-          height: 46,
-          width: 415,
+          height: 40,
+          width: 400,
           borderRadius: 23,
           backgroundImage: `linear-gradient(to right, #${col1}, #${col2}, #${col3}, #${col4})`
         }}>
@@ -113,8 +112,8 @@ export default async function handler(req: NextApiRequest) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            height: 46,
-            width: 415,
+            height: 40,
+            width: 400,
             borderRadius: 23,
             backgroundSize: '10% 100%',
             backgroundRepeat: 'no-repeat',
@@ -123,7 +122,7 @@ export default async function handler(req: NextApiRequest) {
           <p
             style={{
               color: 'white',
-              font: `700 18.4px Varela Round`
+              font: `700 18px Comic Sans MS`
             }}>
             {displayString}
           </p>
@@ -131,8 +130,8 @@ export default async function handler(req: NextApiRequest) {
       </div>
     ),
     {
-      width: 415,
-      height: 46,
+      width: 400,
+      height: 40,
       fonts: [
         {
           name: 'Varela Round',
