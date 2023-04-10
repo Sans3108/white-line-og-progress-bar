@@ -1,4 +1,3 @@
-import '@/styles/barFont.css';
 import type { NextApiRequest } from 'next';
 import { ImageResponse } from '@vercel/og';
 
@@ -54,8 +53,12 @@ export const config = {
   runtime: 'edge'
 };
 
+const font = fetch(new URL('../../../fonts/Nunito-BlackItalic.ttf', import.meta.url)).then(res => res.arrayBuffer());
+
 export default async function handler(req: NextApiRequest) {
   const queryParams = new URL(req.url!).searchParams;
+
+  const fontData = await font;
 
   const c = getParam(queryParams.get('ct'), 69); // Current time
   const t = getParam(queryParams.get('tt'), 420); // Total time
@@ -94,7 +97,8 @@ export default async function handler(req: NextApiRequest) {
           <p
             className="displayText"
             style={{
-              color: 'white'
+              color: 'white',
+              font: `900 20px Nunito italic`
             }}>
             {text}
           </p>
@@ -103,7 +107,15 @@ export default async function handler(req: NextApiRequest) {
     ),
     {
       width: 400,
-      height: 40
+      height: 40,
+      fonts: [
+        {
+          name: 'Nunito',
+          data: fontData,
+          style: 'italic',
+          weight: 900
+        }
+      ]
     }
   );
 }
