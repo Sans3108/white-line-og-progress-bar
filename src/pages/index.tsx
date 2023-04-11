@@ -31,7 +31,7 @@ export default function Home() {
             style={{
               color: 'cyan'
             }}>
-            ct: number = 69
+            c: number = 69
           </code>{' '}
           Current time (in seconds)<br></br>
           <code
@@ -39,7 +39,7 @@ export default function Home() {
             style={{
               color: 'cyan'
             }}>
-            tt: number = 420
+            t: number = 420
           </code>{' '}
           Total time (in seconds)<br></br>
           <code
