@@ -1,53 +1,7 @@
 import type { NextApiRequest } from 'next';
 import { ImageResponse } from '@vercel/og';
-
-function isHexColor(str: string): boolean {
-  if (str.length !== 6) return false;
-
-  for (let i = 0; i < str.length; i++) {
-    const charCode = str.charCodeAt(i);
-    if (
-      !(
-        (
-          (charCode >= 48 && charCode <= 57) || // 0-9
-          (charCode >= 65 && charCode <= 70) || // A-F
-          (charCode >= 97 && charCode <= 102)
-        ) // a-f
-      )
-    )
-      return false;
-  }
-
-  return true;
-}
-
-function getParam(V: unknown, D: number, color?: boolean): number;
-function getParam(V: unknown, D: boolean, color?: boolean): boolean;
-function getParam(V: unknown, D: string, color?: boolean): string;
-function getParam(V: unknown, D: boolean | number | string, color?: boolean) {
-  if (!V) return D;
-
-  if (typeof D === 'boolean') {
-    if (V === 'true') {
-      return true;
-    } else if (V === 'false') {
-      return false;
-    } else return D;
-  }
-
-  if (typeof D === 'string' && color) {
-    if (String(V).length === 6 && isHexColor(String(V))) {
-      return String(V);
-    } else return D;
-  } else if (typeof D === 'string') {
-    if (String(V).length > 0) return String(V);
-    return D;
-  }
-
-  if (isNaN(Number(V)) || Number(V) < 0) {
-    return D;
-  } else return Number(V);
-}
+import { getParam } from '@/utils/functions';
+import { colord } from 'colord';
 
 export const config = {
   runtime: 'edge'
@@ -60,14 +14,25 @@ export default async function handler(req: NextApiRequest) {
 
   const fontData = await font;
 
-  const c = getParam(queryParams.get('ct'), 69); // Current time
-  const t = getParam(queryParams.get('tt'), 420); // Total time
+  const c = getParam(queryParams.get('c'), 69); // Current time
+  const t = getParam(queryParams.get('t'), 420); // Total time
 
-  const col1 = getParam(queryParams.get('c1'), '000000', true);
-  const col2 = getParam(queryParams.get('c2'), '000000', true);
-  const col3 = getParam(queryParams.get('c3'), '000000', true);
-  const col4 = getParam(queryParams.get('c4'), '000000', true);
-
+  const c1 = getParam(queryParams.get('c1'), '000000', true);
+  console.log(c1);
+  const bgc1 = colord(`#${c1}`).darken(0.3).desaturate(0.5).toHex().slice(1);
+  console.log(bgc1);
+  const c2 = getParam(queryParams.get('c2'), '000000', true);
+  console.log(c2);
+  const bgc2 = colord(`#${c2}`).darken(0.3).desaturate(0.5).toHex().slice(1);
+  console.log(bgc2);
+  const c3 = getParam(queryParams.get('c3'), '000000', true);
+  console.log(c3);
+  const bgc3 = colord(`#${c3}`).darken(0.3).desaturate(0.5).toHex().slice(1);
+  console.log(bgc3);
+  const c4 = getParam(queryParams.get('c4'), '000000', true);
+  console.log(c4);
+  const bgc4 = colord(`#${c4}`).darken(0.3).desaturate(0.5).toHex().slice(1);
+  console.log(bgc4);
   const p = (c / t) * 100;
 
   const text = getParam(queryParams.get('txt'), `undefined`);
@@ -77,32 +42,52 @@ export default async function handler(req: NextApiRequest) {
       <div
         style={{
           display: 'flex',
-          height: 40,
-          width: 400,
-          borderRadius: 23,
-          backgroundImage: `linear-gradient(to right, #${col1}, #${col2}, #${col3}, #${col4})`
+          width: '400px',
+          height: '40px',
+          justifyContent: 'center',
+          alignItems: 'center'
         }}>
         <div
           style={{
+            borderRadius: '23px',
+            height: '100%',
+            width: '100%',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            height: 40,
-            width: 400,
-            borderRadius: 23,
-            backgroundSize: `${p}% 100%`,
-            backgroundRepeat: 'no-repeat',
-            backgroundImage: 'linear-gradient(to right, rgba(255, 255, 255, 0.3))'
+            backgroundImage: `linear-gradient(to right, #${bgc1}, #${bgc2}, #${bgc3}, #${bgc4})`
           }}>
-          <p
-            className="displayText"
+          <div
             style={{
-              color: 'white',
-              font: `900 20px Nunito italic`
+              borderRadius: '23px',
+              height: '100%',
+              display: 'flex',
+              width: `${p}%`,
+              overflow: 'hidden'
             }}>
-            {text}
-          </p>
+            <div
+              style={{
+                inset: 0,
+                backgroundRepeat: 'no-repeat',
+                position: 'absolute',
+                borderRadius: '23px',
+                height: '100%',
+                width: '400px',
+                backgroundImage: `linear-gradient(to right, #${c1}, #${c2}, #${c3}, #${c4})`
+              }}></div>
+          </div>
         </div>
+        <p
+          style={{
+            color: 'white',
+            font: `900 20px Nunito italic`,
+            position: 'absolute',
+            textAlign: 'center',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'hidden'
+          }}>
+          {text}
+        </p>
       </div>
     ),
     {
