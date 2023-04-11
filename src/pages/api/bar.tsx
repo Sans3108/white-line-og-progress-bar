@@ -18,21 +18,13 @@ export default async function handler(req: NextApiRequest) {
   const t = getParam(queryParams.get('t'), 420); // Total time
 
   const c1 = getParam(queryParams.get('c1'), '000000', true);
-  console.log(c1);
   const bgc1 = colord(`#${c1}`).darken(0.3).desaturate(0.5).toHex().slice(1);
-  console.log(bgc1);
   const c2 = getParam(queryParams.get('c2'), '000000', true);
-  console.log(c2);
   const bgc2 = colord(`#${c2}`).darken(0.3).desaturate(0.5).toHex().slice(1);
-  console.log(bgc2);
   const c3 = getParam(queryParams.get('c3'), '000000', true);
-  console.log(c3);
   const bgc3 = colord(`#${c3}`).darken(0.3).desaturate(0.5).toHex().slice(1);
-  console.log(bgc3);
   const c4 = getParam(queryParams.get('c4'), '000000', true);
-  console.log(c4);
   const bgc4 = colord(`#${c4}`).darken(0.3).desaturate(0.5).toHex().slice(1);
-  console.log(bgc4);
   const p = (c / t) * 100;
 
   const text = getParam(queryParams.get('txt'), `undefined`);
