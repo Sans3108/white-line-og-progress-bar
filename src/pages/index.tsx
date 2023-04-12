@@ -1,125 +1,90 @@
+import { getQueryMeta, invertColor } from '@/utils/functions';
+import Link from 'next/link';
+import Head from 'next/head';
+
 export default function Home() {
+  const { c, t, w, h, b, f, c1, c2, c3, c4, txt } = getQueryMeta();
+
+  const colors = {
+    default: '#d4d4d4',
+    keyword: '#9cdcfe',
+    type: '#4ec9b0',
+    number: '#b5cea8',
+    string: '#ce9178',
+    boolean: '#569cd6',
+    comment: '#6a9955'
+  };
+
+  const params: JSX.Element[] = [c, t, w, h, b, f, c1, c2, c3, c4, txt].map(item => {
+    const value: JSX.Element = (
+      <span>
+        {item.type === 'string' ? <span style={{ color: colors[item.type] }}>'</span> : null}
+        <span
+          style={
+            item.isColor
+              ? {
+                  color: invertColor(`#${item.default}`, true),
+                  backgroundColor: `#${item.default}`
+                }
+              : { color: colors[item.type] }
+          }>
+          {item.default}
+        </span>
+        {item.type === 'string' ? <span style={{ color: colors[item.type] }}>'</span> : null}
+      </span>
+    );
+
+    return (
+      <span key={item.param} style={{ color: colors.comment }}>
+        <code>
+          <span style={{ color: colors.keyword }}>{item.param}</span>
+          <span style={{ color: colors.keyword }}>:</span> <span style={{ color: '#51bb7d' }}>{item.type}</span> <span style={{ color: '#ddd' }}>=</span> {value}
+          <span style={{ color: '#ddd' }}>;</span>
+        </code>
+        {' // '}
+        {item.description}
+        <br></br>
+      </span>
+    );
+  });
+
   return (
-    <main>
-      <div
-        className="flex justify-center items-center flex-col absolute top-1/2 left-1/2 bg-gray-800"
-        style={{
-          maxWidth: 'max-content',
-          borderRadius: '20px',
-          paddingRight: '40px',
-          paddingLeft: '40px',
-          paddingTop: '20px',
-          paddingBottom: '20px',
-          transform: 'translate(-50%, -50%)',
-          border: '1px solid white',
-          margin: '0'
-        }}>
-        <h1 className="text-center">
-          Parameter Docs for{' '}
-          <code
-            className="bg-slate-600"
-            style={{
-              color: 'cyan'
-            }}>
-            /api/bar
-          </code>
-        </h1>
-        <br></br>
-        <p>
-          <code
-            className="bg-slate-600"
-            style={{
-              color: 'cyan'
-            }}>
-            c: number = 69
-          </code>{' '}
-          Current time (in seconds)<br></br>
-          <code
-            className="bg-slate-600"
-            style={{
-              color: 'cyan'
-            }}>
-            t: number = 420
-          </code>{' '}
-          Total time (in seconds)<br></br>
-          <code
-            className="bg-slate-600"
-            style={{
-              color: 'cyan'
-            }}>
-            c1: string = '
-            <span
-              style={{
-                backgroundColor: '#000000',
-                color: 'white'
-              }}>
-              000000
-            </span>
-            '
-          </code>{' '}
-          First gradient color (hex string)<br></br>
-          <code
-            className="bg-slate-600"
-            style={{
-              color: 'cyan'
-            }}>
-            c2: string = '
-            <span
-              style={{
-                backgroundColor: '#000000',
-                color: 'white'
-              }}>
-              000000
-            </span>
-            '
-          </code>{' '}
-          Second gradient color (hex string)<br></br>
-          <code
-            className="bg-slate-600"
-            style={{
-              color: 'cyan'
-            }}>
-            c3: string = '
-            <span
-              style={{
-                backgroundColor: '#000000',
-                color: 'white'
-              }}>
-              000000
-            </span>
-            '
-          </code>{' '}
-          Third gradient color (hex string)<br></br>
-          <code
-            className="bg-slate-600"
-            style={{
-              color: 'cyan'
-            }}>
-            c4: string = '
-            <span
-              style={{
-                backgroundColor: '#000000',
-                color: 'white'
-              }}>
-              000000
-            </span>
-            '
-          </code>{' '}
-          Fourth gradient color (hex string)<br></br>
-          <code
-            className="bg-slate-600"
-            style={{
-              color: 'cyan'
-            }}>
-            txt: string = 'undefined'
-          </code>{' '}
-          Text to display<br></br>
-        </p>
-        <br></br>
-        <p className="text-center">
-          Btw I have no idea why are you here, go away lol<br></br>This page wasn't made for mobile...
-        </p>
-      </div>
-    </main>
+    <div>
+      <Head>
+        <title>Parameter Docs</title>
+      </Head>
+      <main>
+        <div
+          className='flex justify-center items-start flex-col absolute top-1/2 left-1/2'
+          style={{
+            maxWidth: 'max-content',
+            borderRadius: '20px',
+            paddingRight: '40px',
+            paddingLeft: '40px',
+            paddingTop: '20px',
+            paddingBottom: '20px',
+            transform: 'translate(-50%, -50%)',
+            boxShadow: '0px 10px 13px -7px #000, 5px 5px 15px 5px rgba(0,0,0,0)',
+            margin: '0',
+            backgroundColor: '#1f1f1f',
+            color: colors.comment
+          }}>
+          <h1>
+            // Parameter Docs for{' '}
+            <code style={{ color: '#aac99c' }}>
+              <Link href='/api/progress-bar' className='underline'>
+                /api/progress-bar
+              </Link>
+            </code>
+          </h1>
+          <br></br>
+          <p>{...params}</p>
+          <br></br>
+          <p>
+            // Btw I have no idea why are you here, go away lol<br></br>// This page wasn't made for mobile...
+          </p>
+        </div>
+      </main>
+    </div>
   );
 }

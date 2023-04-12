@@ -8,6 +8,18 @@
   --background-end-rgb: 0, 0, 0;
 }
 
+@font-face {
+  font-family: Hasklig;
+  src: url('/fonts/Hasklig-Regular.ttf');
+  font-weight: 400;
+}
+
+*,
+::before,
+::after {
+  font-family: Hasklig;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
