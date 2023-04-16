@@ -9,7 +9,7 @@ export const config = {
 
 const font = fetch(new URL('public/Nunito-BlackItalic.ttf', import.meta.url)).then(res => res.arrayBuffer());
 
-export default async (req: NextApiRequest) => {
+export default async function progressBar(req: NextApiRequest) {
   const fontData = await font;
 
   const params = getQueryData(req);
@@ -86,4 +86,4 @@ export default async (req: NextApiRequest) => {
       ]
     }
   );
-};
+}

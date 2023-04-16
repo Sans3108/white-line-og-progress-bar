@@ -6,7 +6,7 @@ import tailwindConfig from '../../tailwind.config';
 
 const tw = resolveConfig(tailwindConfig);
 
-export default () => {
+export default function index() {
   const params: JSX.Element[] = queryParamList().map(item => {
     const typeColors = {
       number: tw.theme!.colors!.number as string,
@@ -68,4 +68,4 @@ export default () => {
       </main>
     </div>
   );
-};
+}
