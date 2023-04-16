@@ -23,7 +23,7 @@ export function isHexColor(str: string): boolean {
 export function getParam(V: unknown, D: number, color?: boolean): number;
 export function getParam(V: unknown, D: boolean, color?: boolean): boolean;
 export function getParam(V: unknown, D: string, color?: boolean): string;
-export function getParam(V: unknown, D: boolean | number | string, color?: boolean) {
+export function getParam(V: unknown, D: number | boolean | string, color?: boolean) {
   if (!V) return D;
 
   if (typeof D === 'boolean') {
@@ -48,119 +48,140 @@ export function getParam(V: unknown, D: boolean | number | string, color?: boole
   } else return Number(V);
 }
 
-export function getQueryData(req: NextApiRequest) {
-  const queryParams = new URL(req.url!).searchParams;
-
-  const c = getParam(queryParams.get('c'), 69); // Current time
-  const t = getParam(queryParams.get('t'), 420); // Total time
-
-  const w = getParam(queryParams.get('w'), 400); // Width (px)
-  const h = getParam(queryParams.get('h'), 40); // Height (px)
-  const b = getParam(queryParams.get('b'), 23); // Border radius (px)
-  const f = getParam(queryParams.get('f'), 20); // Font size (px)
-
-  const c1 = getParam(queryParams.get('c1'), '000000', true);
-  const c2 = getParam(queryParams.get('c2'), '000000', true);
-  const c3 = getParam(queryParams.get('c3'), '000000', true);
-  const c4 = getParam(queryParams.get('c4'), '000000', true);
-
-  const txt = getParam(queryParams.get('txt'), `undefined`);
-
-  return {
-    c,
-    t,
-    w,
-    h,
-    b,
-    f,
-    c1,
-    c2,
-    c3,
-    c4,
-    txt
-  };
+export interface Param {
+  name: string;
+  valueType: 'string' | 'number' | 'boolean';
+  defaultValue: string;
+  description: string;
+  isColor: boolean;
 }
 
-export function getQueryMeta(param: number = 1, p: string = 'hi'): { [key: string]: { param: string; type: 'string' | 'number' | 'boolean'; default: string; description: string; isColor: boolean } } {
-  return {
-    c: {
-      param: 'c',
-      type: 'number',
-      default: '69',
+export function queryParamList(): Param[] {
+  return [
+    {
+      name: 'c',
+      valueType: 'number',
+      defaultValue: '69',
       description: 'Current time (seconds)',
       isColor: false
     },
-    t: {
-      param: 't',
-      type: 'number',
-      default: '420',
+    {
+      name: 't',
+      valueType: 'number',
+      defaultValue: '420',
       description: 'Total time (seconds)',
       isColor: false
     },
-    w: {
-      param: 'w',
-      type: 'number',
-      default: '400',
+    {
+      name: 'w',
+      valueType: 'number',
+      defaultValue: '400',
       description: 'Width of the image (px)',
       isColor: false
     },
-    h: {
-      param: 'h',
-      type: 'number',
-      default: '40',
+    {
+      name: 'h',
+      valueType: 'number',
+      defaultValue: '40',
       description: 'Height of the image (px)',
       isColor: false
     },
-    b: {
-      param: 'b',
-      type: 'number',
-      default: '23',
+    {
+      name: 'b',
+      valueType: 'number',
+      defaultValue: '23',
       description: 'Border radius (px)',
       isColor: false
     },
-    f: {
-      param: 'f',
-      type: 'number',
-      default: '20',
+    {
+      name: 'f',
+      valueType: 'number',
+      defaultValue: '20',
       description: 'Font size (px)',
       isColor: false
     },
-    c1: {
-      param: 'c1',
-      type: 'string',
-      default: '000000',
+    {
+      name: 'c1',
+      valueType: 'string',
+      defaultValue: '000000',
       description: '1st gradient color (hex)',
       isColor: true
     },
-    c2: {
-      param: 'c2',
-      type: 'string',
-      default: '000000',
+    {
+      name: 'c2',
+      valueType: 'string',
+      defaultValue: '000000',
       description: '2nd gradient color (hex)',
       isColor: true
     },
-    c3: {
-      param: 'c3',
-      type: 'string',
-      default: '000000',
+    {
+      name: 'c3',
+      valueType: 'string',
+      defaultValue: '000000',
       description: '3rd gradient color (hex)',
       isColor: true
     },
-    c4: {
-      param: 'c4',
-      type: 'string',
-      default: '000000',
+    {
+      name: 'c4',
+      valueType: 'string',
+      defaultValue: '000000',
       description: '4th gradient color (hex)',
       isColor: true
     },
-    txt: {
-      param: 'txt',
-      type: 'string',
-      default: 'undefined',
+    {
+      name: 'txt',
+      valueType: 'string',
+      defaultValue: 'undefined',
       description: 'Text to display',
       isColor: false
     }
-  };
+  ];
+}
+
+export interface StringParam {
+  name: string;
+  value: string;
+}
+
+export interface BooleanParam {
+  name: string;
+  value: boolean;
+}
+
+export interface NumberParam {
+  name: string;
+  value: number;
+}
+
+export type ParamType = StringParam | NumberParam | BooleanParam;
+
+export function getQueryData(req: NextApiRequest) {
+  const paramList = queryParamList();
+
+  const queryParams = new URL(req.url!).searchParams;
+
+  const params: ParamType[] = [];
+
+  for (const p of paramList) {
+    if (p.valueType === 'string') {
+      params.push({
+        name: p.name,
+        value: getParam(queryParams.get(p.name), String(p.defaultValue), p.isColor)
+      });
+    } else if (p.valueType === 'boolean') {
+      params.push({
+        name: p.name,
+        value: getParam(queryParams.get(p.name), p.defaultValue.toLowerCase() === 'true' ? true : false, p.isColor)
+      });
+    } else {
+      params.push({
+        name: p.name,
+        value: getParam(queryParams.get(p.name), Number(p.defaultValue) || 0, p.isColor)
+      });
+    }
+  }
+
+  return params;
 }
 
 // https://stackoverflow.com/a/35970186
