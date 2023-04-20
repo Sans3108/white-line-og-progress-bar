@@ -75,9 +75,7 @@ export default async function progressBar(req: NextApiRequest) {
             fontWeight: 900,
             fontFamily: 'Nunito',
             overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            letterSpacing: '0.1px'
+            whiteSpace: 'nowrap'
           }}>
           {txt}
         </p>
