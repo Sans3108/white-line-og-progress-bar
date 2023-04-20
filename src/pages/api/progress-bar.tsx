@@ -30,10 +30,13 @@ export default async function progressBar(req: NextApiRequest) {
 
   const p = (c / t) * 100;
 
-  const bgc1 = colord(`#${c1}`).darken(0.3).desaturate(0.5).toHex().slice(1);
-  const bgc2 = colord(`#${c2}`).darken(0.3).desaturate(0.5).toHex().slice(1);
-  const bgc3 = colord(`#${c3}`).darken(0.3).desaturate(0.5).toHex().slice(1);
-  const bgc4 = colord(`#${c4}`).darken(0.3).desaturate(0.5).toHex().slice(1);
+  const dark = 0.2;
+  const desat = 0.2;
+
+  const bgc1 = colord(`#${c1}`).darken(dark).desaturate(desat).toHex().slice(1);
+  const bgc2 = colord(`#${c2}`).darken(dark).desaturate(desat).toHex().slice(1);
+  const bgc3 = colord(`#${c3}`).darken(dark).desaturate(desat).toHex().slice(1);
+  const bgc4 = colord(`#${c4}`).darken(dark).desaturate(desat).toHex().slice(1);
 
   return new ImageResponse(
     (
