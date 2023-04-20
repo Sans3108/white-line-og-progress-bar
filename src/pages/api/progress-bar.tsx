@@ -27,7 +27,6 @@ export default async function progressBar(req: NextApiRequest) {
   const c3 = params.find(p => p.name === 'c3')!.value as string;
   const c4 = params.find(p => p.name === 'c4')!.value as string;
   const txt = params.find(p => p.name === 'txt')!.value as string;
-  console.log(txt);
 
   const p = (c / t) * 100 || 0;
 
