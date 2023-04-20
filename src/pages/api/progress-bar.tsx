@@ -28,7 +28,7 @@ export default async function progressBar(req: NextApiRequest) {
   const c4 = params.find(p => p.name === 'c4')!.value as string;
   const txt = params.find(p => p.name === 'txt')!.value as string;
 
-  const p = (c / t) * 100;
+  const p = Math.round((c / t) * 100);
 
   const dark = 0.2;
   const desat = 0.2;
@@ -68,9 +68,14 @@ export default async function progressBar(req: NextApiRequest) {
           </div>
         </div>
         <p
-          tw='text-white font-[900] font-[Nunito] italic absolute text-center truncate'
+          tw='text-white italic absolute text-center'
           style={{
-            fontSize: `${f}px`
+            fontSize: `${f}px`,
+            fontWeight: 900,
+            fontFamily: 'Nunito',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap'
           }}>
           {txt}
         </p>
