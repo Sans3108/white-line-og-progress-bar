@@ -27,8 +27,9 @@ export default async function progressBar(req: NextApiRequest) {
   const c3 = params.find(p => p.name === 'c3')!.value as string;
   const c4 = params.find(p => p.name === 'c4')!.value as string;
   const txt = params.find(p => p.name === 'txt')!.value as string;
+  console.log(txt);
 
-  const p = Math.round((c / t) * 100);
+  const p = (c / t) * 100 || 0;
 
   const dark = 0.2;
   const desat = 0.2;
@@ -59,11 +60,12 @@ export default async function progressBar(req: NextApiRequest) {
               width: `${p}%`
             }}>
             <div
-              tw='inset-0 bg-no-repeat absolute h-full'
+              tw='inset-0 absolute h-full'
               style={{
                 borderRadius: `${b}px`,
                 width: `${w}px`,
-                backgroundImage: `linear-gradient(to right, #${c1}, #${c2}, #${c3}, #${c4})`
+                backgroundImage: `linear-gradient(to right, #${c1}, #${c2}, #${c3}, #${c4})`,
+                backgroundRepeat: 'no-repeat'
               }}></div>
           </div>
         </div>
@@ -75,7 +77,8 @@ export default async function progressBar(req: NextApiRequest) {
             fontFamily: 'Nunito',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
+            letterSpacing: '0.1px'
           }}>
           {txt}
         </p>
